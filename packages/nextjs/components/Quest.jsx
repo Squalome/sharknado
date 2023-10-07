@@ -17,7 +17,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
 
   const { address } = useAccount();
 
-  const { writeAsync } = useSharknadoContractWrite("joinGroup");
+  const { write } = useSharknadoContractWrite("joinGroup");
 
   const handleSubmit = () => {
     console.log({ address });
@@ -27,7 +27,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
 
     console.log({ identity });
 
-    writeAsync(questionId.toString(), groupId.toString(), identity._commitment);
+    write({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
 
     setIsSelected(!isSelected);
     setIsModalOpen(true);
