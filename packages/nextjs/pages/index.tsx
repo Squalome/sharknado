@@ -26,7 +26,6 @@ const Home: NextPage = () => {
           <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
             <div className="flex flex-col bg-base-100 px-10 py-10 text-left items-left max-w-xs rounded-3xl">
               <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-
               <p>01 | Join the Quest</p>
               <p>Got an NFT? Find a bait that tickles your fins and hop on.</p>
             </div>
@@ -45,7 +44,7 @@ const Home: NextPage = () => {
           {/* Button that links to quests page */}
           <div className="flex justify-center items-center mt-12">
             <Link href="/quests">
-              <button className="btn btn-secondary btn-lg normal-case font-thick bg-base-200">
+              <button className="btn btn-secondary btn-accent btn-lg normal-case font-thick bg-base-200">
                 Fin-tastic, let&rsquo;s go!
               </button>
             </Link>
