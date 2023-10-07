@@ -4,6 +4,7 @@ node_modules
 # yarn / eslint
 .yarn/*
 .yarn
+/.yarn/
 /.yarn/*
 /.yarn/plugins/@yarnpkg/plugin-typescript.cjs
 /.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch
@@ -110,4 +111,4 @@ fabric.properties
 
 # Built Visual Studio Code Extensions
 *.vsix
-/.yarn/
+.env
