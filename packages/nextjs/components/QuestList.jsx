@@ -1,13 +1,13 @@
 import { Quest } from "./Quest";
-import { useContract } from "~~/hooks/useContractRead";
+import { useSharknadoContract } from "~~/hooks/useContractRead";
 
 /**
  * List of quests
  */
 export const QuestList = () => {
-  const contract = useContract("getQuestionList");
+  const contract = useSharknadoContract("getQuestionList");
 
-  console.log({ contract: contract.data });
+  console.log({ contract: contract });
 
   return (
     <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
