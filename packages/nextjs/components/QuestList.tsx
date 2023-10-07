@@ -25,7 +25,7 @@ const QuestList = () => {
 
   const questionList = contract.data as undefined | Question[];
 
-  console.log(questionList?.[1]);
+  console.log({ questionList });
 
   return (
     <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
