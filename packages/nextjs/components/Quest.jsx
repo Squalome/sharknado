@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { SemaphoreEthers } from "@semaphore-protocol/data";
+import { Group } from "@semaphore-protocol/group";
 import { Identity } from "@semaphore-protocol/identity";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { AddressInput } from "~~/components/scaffold-eth";
 import { useSharknadoContractWrite } from "~~/hooks/useContractWrite";
+import scaffoldConfig from "~~/scaffold.config";
 
 /**
  * Quest question card
@@ -17,25 +20,64 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
 
   const { address } = useAccount();
 
-  const { write } = useSharknadoContractWrite("joinGroup");
+  const { write: writeJoinGroup } = useSharknadoContractWrite("joinGroup");
+  const { write: writeSendAnswerToQuestion } = useSharknadoContractWrite("sendAnswerToQuestion");
 
-  const handleSubmit = () => {
-    console.log({ address });
+  const handleSubmit = async () => {
+    let success = false;
+
+    setIsModalOpen(true);
 
     // just always use wallet address as identity string
     const identity = new Identity(address);
 
     console.log({ identity });
 
-    write({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
-
-    setIsSelected(!isSelected);
-    setIsModalOpen(true);
-
-    if (!isSubmitted) {
-      setIsSubmitted(!isSubmitted);
+    try {
+      await writeJoinGroup({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
+    } catch (e) {
+      console.log("failed joining group, already joined or not holder?");
+      console.log(e?.message);
     }
-    console.log(`Submitted ${response} with wallet ${address}`);
+
+    try {
+      const semaphore = new SemaphoreEthers("https://gnosis.drpc.org", {
+        address: process.env.NEXT_PUBLIC_SEMAPHORE_CONTRACT_ADDRESS,
+      });
+
+      const users = await semaphore.getGroupMembers(groupId.toString());
+
+      const group = new Group(groupId.toString(), 20, users);
+
+      const signal = BigNumber.from(
+        utils.formatBytes32String(`${response === "YES" ? 1 : 0}${walletAddress}`),
+      ).toString();
+
+      const { proof, merkleTreeRoot, nullifierHash } = await generateProof(_identity, group, groupId, signal);
+
+      await writeSendAnswerToQuestion({
+        args: [
+          questionId.toString(),
+          groupId.toString(),
+          response === "YES",
+          walletAddress,
+          merkleTreeRoot,
+          nullifierHash,
+          proof,
+        ],
+      });
+      success = true;
+    } catch (e) {
+      console.log("failed sending answer");
+      console.log(e?.message);
+    }
+
+    if (success) {
+      setIsSelected(!isSelected);
+      setIsSubmitted(!isSubmitted);
+
+      console.log(`Submitted ${response} with wallet ${walletAddress}`);
+    }
   };
 
   const selectOption = e => {
