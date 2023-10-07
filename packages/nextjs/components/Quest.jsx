@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 import { Group } from "@semaphore-protocol/group";
 import { Identity } from "@semaphore-protocol/identity";
+import { generateProof } from "@semaphore-protocol/proof";
 import { BigNumber, utils } from "ethers";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
@@ -14,7 +15,7 @@ import { useSharknadoContractWrite } from "~~/hooks/useContractWrite";
 export const Quest = ({ questionId, groupId, question, reward, sharks, contractAddress, optionA, optionB }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [response, setResponse] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
 
@@ -26,18 +27,21 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
   const handleSubmit = async () => {
     let success = false;
 
-    setIsModalOpen(true);
+    // setIsModalOpen(true);
 
     // just always use wallet address as identity string
     const identity = new Identity(address);
 
     console.log({ identity });
 
+    console.log("questionId: ", questionId.toString());
+    console.log("groupId: ", groupId.toString());
     try {
       await writeJoinGroup({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
+      console.log("joined Group");
     } catch (e) {
-      console.log("failed joining group, already joined or not holder?");
       console.log(e?.message);
+      console.log("failed joining group, already joined or not holder?");
     }
 
     try {
@@ -47,18 +51,33 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
 
       const users = await semaphore.getGroupMembers(groupId.toString());
 
+      console.log({ users });
+
       const group = new Group(groupId.toString(), 20, users);
 
-      const signal = BigNumber.from(
-        utils.formatBytes32String(`${response === "YES" ? 1 : 0}${walletAddress}`),
-      ).toString();
+      console.log({ group });
 
-      const { proof, merkleTreeRoot, nullifierHash } = await generateProof(
-        _identity,
-        group,
-        groupId.toString(),
-        signal,
-      );
+      const isUpvote = response === "YES" ? 1 : 0;
+
+      const addressBytes = utils.arrayify(walletAddress);
+      const packedData = new Uint8Array(21);
+
+      packedData[0] = isUpvote;
+
+      for (let i = 0; i < 20; i++) {
+        packedData[i + 1] = addressBytes[i];
+      }
+
+      console.log({ packedData });
+
+      const packedDataBytesLike = utils.hexlify(packedData);
+      const signal = packedDataBytesLike;
+
+      console.log({ signal });
+
+      const { proof, merkleTreeRoot, nullifierHash } = await generateProof(identity, group, groupId.toString(), signal);
+
+      console.log({ proof, merkleTreeRoot, nullifierHash });
 
       await writeSendAnswerToQuestion({
         args: [
@@ -72,9 +91,11 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
         ],
       });
       success = true;
+
+      console.log("sent answer");
     } catch (e) {
-      console.log("failed sending answer");
       console.log(e?.message);
+      console.log("failed sending answer");
     }
 
     if (success) {
@@ -91,7 +112,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
   };
 
   const handleSign = () => {
-    setIsModalOpen(false);
+    // setIsModalOpen(false);
     console.log(`Signed transactions`);
     window.location.href = "/winner";
   };
