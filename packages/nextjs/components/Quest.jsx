@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 import { Group } from "@semaphore-protocol/group";
 import { Identity } from "@semaphore-protocol/identity";
+import { generateProof } from "@semaphore-protocol/proof";
 import { BigNumber, utils } from "ethers";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
@@ -33,11 +34,14 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
 
     console.log({ identity });
 
+    console.log("questionId: ", questionId.toString());
+    console.log("groupId: ", groupId.toString());
     try {
       await writeJoinGroup({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
+      console.log("joined Group");
     } catch (e) {
-      console.log("failed joining group, already joined or not holder?");
       console.log(e?.message);
+      console.log("failed joining group, already joined or not holder?");
     }
 
     try {
@@ -47,18 +51,21 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
 
       const users = await semaphore.getGroupMembers(groupId.toString());
 
+      console.log({ users });
+
       const group = new Group(groupId.toString(), 20, users);
+
+      console.log({ group });
 
       const signal = BigNumber.from(
         utils.formatBytes32String(`${response === "YES" ? 1 : 0}${walletAddress}`),
       ).toString();
 
-      const { proof, merkleTreeRoot, nullifierHash } = await generateProof(
-        _identity,
-        group,
-        groupId.toString(),
-        signal,
-      );
+      console.log({ signal });
+
+      const { proof, merkleTreeRoot, nullifierHash } = await generateProof(identity, group, groupId.toString(), signal);
+
+      console.log({ proof, merkleTreeRoot, nullifierHash });
 
       await writeSendAnswerToQuestion({
         args: [
@@ -72,9 +79,11 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
         ],
       });
       success = true;
+
+      console.log("sent answer");
     } catch (e) {
-      console.log("failed sending answer");
       console.log(e?.message);
+      console.log("failed sending answer");
     }
 
     if (success) {
