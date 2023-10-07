@@ -13,7 +13,7 @@ const Home: NextPage = () => {
             {/* <span className="block text-2xl mb-2">What is</span> */}
             <span className="block text-4xl font-bold">What is Sharknado?</span>
           </h1>
-          <p className="text-center text-lg">Here is our tagline</p>
+          <p className="text-center text-lg">Dive in, Cash out</p>
         </div>
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
