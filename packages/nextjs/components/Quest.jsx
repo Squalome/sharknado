@@ -3,7 +3,7 @@ import { SemaphoreEthers } from "@semaphore-protocol/data";
 import { Group } from "@semaphore-protocol/group";
 import { Identity } from "@semaphore-protocol/identity";
 import { generateProof } from "@semaphore-protocol/proof";
-import { BigNumber, utils } from "ethers";
+import { utils } from "ethers";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { AddressInput } from "~~/components/scaffold-eth";
@@ -27,7 +27,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
   const handleSubmit = async () => {
     let success = false;
 
-    // setIsModalOpen(true);
+    setIsModalOpen(false);
 
     // just always use wallet address as identity string
     const identity = new Identity(address);
