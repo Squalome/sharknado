@@ -52,13 +52,13 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
             <div className="flex flex-row gap-3 pb-6">
               <button
                 onClick={e => selectOption(e)}
-                className={response == optionA.toUpperCase() ? "btn btn-accent" : "btn btn-secondary"}
+                className={response == optionA.toUpperCase() ? "btn btn-secondary" : "btn btn-accent"}
               >
                 {optionA}
               </button>
               <button
                 onClick={e => selectOption(e)}
-                className={response == optionB.toUpperCase() ? "btn btn-accent" : "btn btn-secondary"}
+                className={response == optionB.toUpperCase() ? "btn btn-secondary" : "btn btn-accent"}
               >
                 {optionB}
               </button>
