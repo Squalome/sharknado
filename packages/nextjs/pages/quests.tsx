@@ -4,10 +4,10 @@ import { QuestsIntro } from "../components/QuestsIntro";
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
 
-const Home: NextPage = () => {
+const Quests: NextPage = () => {
   return (
     <>
-      <MetaHeader />
+      <MetaHeader title="Quests" />
       <div className="flex items-center flex-col flex-grow pt-10">
         <QuestsIntro />
         <QuestList />
@@ -16,4 +16,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Quests;

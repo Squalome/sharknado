@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Address } from "./scaffold-eth/Address";
+import { Address } from "~~/components/scaffold-eth";
+import { AddressInput } from "~~/components/scaffold-eth";
 
 /**
  * Quest question card
@@ -9,7 +10,7 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [response, setResponse] = useState("");
-  const [walletAddress, setWalletAddress] = useState("");
+  const [address, setAddress] = useState("");
 
   const handleClick = () => {
     setIsSelected(!isSelected);
@@ -18,12 +19,18 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
     if (!isSubmitted) {
       setIsSubmitted(!isSubmitted);
     }
-    console.log(`Submitted ${response} with wallet ${walletAddress}`);
+    console.log(`Submitted ${response} with wallet ${address}`);
   };
 
   const selectOption = e => {
     console.log(`Selected: ${e.target.innerText}`);
     setResponse(e.target.innerText);
+  };
+
+  const handleSign = () => {
+    setIsModalOpen(false);
+    console.log(`Signed transactions`);
+    window.location.href = "/winner";
   };
 
   return (
@@ -45,13 +52,13 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
             <div className="flex flex-row gap-3 pb-6">
               <button
                 onClick={e => selectOption(e)}
-                className={response == optionA.toUpperCase() ? "btn btn-primary" : "btn btn-secondary"}
+                className={response == optionA.toUpperCase() ? "btn btn-accent" : "btn btn-secondary"}
               >
                 {optionA}
               </button>
               <button
                 onClick={e => selectOption(e)}
-                className={response == optionB.toUpperCase() ? "btn btn-primary" : "btn btn-secondary"}
+                className={response == optionB.toUpperCase() ? "btn btn-accent" : "btn btn-secondary"}
               >
                 {optionB}
               </button>
@@ -59,15 +66,10 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
             <label className="label">
               <span className="label-text">Paste a fresh wallet address of yours here to join the pool!</span>
             </label>
-            <input
-              onChange={e => setWalletAddress(e.target.value)}
-              className="input input-bordered w-full mb-4"
-              type="text"
-              placeholder="Wallet address"
-            />
+            <AddressInput onChange={setAddress} value={address} placeholder="Wallet address" />
             <button
               onClick={() => handleClick()}
-              className="btn btn-secondary btn-md normal-case font-thick bg-base-200"
+              className="btn btn-secondary btn-md normal-case font-thick bg-base-200 mt-4"
             >
               Submit
             </button>
@@ -100,7 +102,7 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
               </ul>
               <div className="modal-action">
                 <form method="dialog">
-                  <button onClick={() => setIsModalOpen(false)} className="btn btn-secondary">
+                  <button onClick={() => handleSign()} className="btn btn-secondary">
                     Sign transactions
                   </button>
                 </form>

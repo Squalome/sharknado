@@ -14,7 +14,7 @@ export const QuestList = () => {
       <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
         <Quest
           question_id="#06"
-          question="Who is cooler: Shark or Horse?"
+          question="Shark or Horse?"
           contractAddress="0xDe00050C5eCBA5E32E1D0b57e1f6669184f4fC15"
           reward="0.1 ETH"
           sharks="6/7"
