@@ -33,7 +33,8 @@ const QuestList = () => {
         {questionList?.map(q => (
           <Quest
             key={q.questionId.toString()}
-            question_id={q.questionId}
+            questionId={q.questionId}
+            groupId={q.groupId}
             question={q.question}
             contractAddress={q.eligibleHolderTokenContract}
             reward={q.bountyAmount}

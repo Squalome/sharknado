@@ -8,7 +8,7 @@ import { useSharknadoContractWrite } from "~~/hooks/useContractWrite";
 /**
  * Quest question card
  */
-export const Quest = ({ question_id, question, reward, sharks, contractAddress, optionA, optionB }) => {
+export const Quest = ({ questionId, groupId, question, reward, sharks, contractAddress, optionA, optionB }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
@@ -27,7 +27,7 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
 
     console.log({ identity });
 
-    // writeAsync(_questionId, _groupId, _identityCommitment);
+    writeAsync(questionId.toString(), groupId.toString(), identity._commitment);
 
     setIsSelected(!isSelected);
     setIsModalOpen(true);
