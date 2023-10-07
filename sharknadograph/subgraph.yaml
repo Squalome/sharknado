@@ -1,0 +1,33 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Sharknado
+    network: gnosis
+    source:
+      address: "0x10d7526150f4134d9B6631c8C4A6d812a91dFfA7"
+      abi: Sharknado
+      startBlock: 30342442
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - GroupJoined
+        - OwnershipTransferred
+        - QuestionAdded
+        - QuestionAnswered
+      abis:
+        - name: Sharknado
+          file: ./abis/Sharknado.json
+      eventHandlers:
+        - event: GroupJoined(uint256)
+          handler: handleGroupJoined
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: QuestionAdded(uint256,uint256,string,address,uint32,uint256)
+          handler: handleQuestionAdded
+        - event: QuestionAnswered(uint256,uint256,bool,uint256)
+          handler: handleQuestionAnswered
+      file: ./src/sharknado.ts

@@ -1,0 +1,42 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: SharknadoSemaphore
+    network: gnosis
+    source:
+      address: "0xee5cF4Cc94bb97E2bA0d0a115b69c6075Ce42DD1"
+      abi: SharknadoSemaphore
+      startBlock: 30341854
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - GroupAdminUpdated
+        - GroupCreated
+        - GroupMerkleTreeDurationUpdated
+        - MemberAdded
+        - MemberRemoved
+        - MemberUpdated
+        - ProofVerified
+      abis:
+        - name: SharknadoSemaphore
+          file: ./abis/SharknadoSemaphore.json
+      eventHandlers:
+        - event: GroupAdminUpdated(indexed uint256,indexed address,indexed address)
+          handler: handleGroupAdminUpdated
+        - event: GroupCreated(indexed uint256,uint256,uint256)
+          handler: handleGroupCreated
+        - event: GroupMerkleTreeDurationUpdated(indexed uint256,uint256,uint256)
+          handler: handleGroupMerkleTreeDurationUpdated
+        - event: MemberAdded(indexed uint256,uint256,uint256,uint256)
+          handler: handleMemberAdded
+        - event: MemberRemoved(indexed uint256,uint256,uint256,uint256)
+          handler: handleMemberRemoved
+        - event: MemberUpdated(indexed uint256,uint256,uint256,uint256,uint256)
+          handler: handleMemberUpdated
+        - event: ProofVerified(indexed uint256,indexed uint256,uint256,indexed uint256,uint256)
+          handler: handleProofVerified
+      file: ./src/sharknado-semaphore.ts
