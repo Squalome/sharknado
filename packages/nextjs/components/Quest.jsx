@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { Identity } from "@semaphore-protocol/identity";
+import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { AddressInput } from "~~/components/scaffold-eth";
+import { useSharknadoContractWrite } from "~~/hooks/useContractWrite";
 
 /**
  * Quest question card
@@ -10,9 +13,22 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [response, setResponse] = useState("");
-  const [address, setAddress] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
 
-  const handleClick = () => {
+  const { address } = useAccount();
+
+  const { writeAsync } = useSharknadoContractWrite("joinGroup");
+
+  const handleSubmit = () => {
+    console.log({ address });
+
+    // just always use wallet address as identity string
+    const identity = new Identity(address);
+
+    console.log({ identity });
+
+    // writeAsync(_questionId, _groupId, _identityCommitment);
+
     setIsSelected(!isSelected);
     setIsModalOpen(true);
 
@@ -66,9 +82,9 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
             <label className="label">
               <span className="label-text">Paste a fresh wallet address of yours here to join the pool!</span>
             </label>
-            <AddressInput onChange={setAddress} value={address} placeholder="Wallet address" />
+            <AddressInput onChange={setWalletAddress} value={walletAddress} placeholder="Wallet address" />
             <button
-              onClick={() => handleClick()}
+              onClick={() => handleSubmit()}
               className="btn btn-secondary btn-md normal-case font-thick bg-base-200 mt-4"
             >
               Submit
