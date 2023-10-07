@@ -4,6 +4,10 @@ node_modules
 # yarn / eslint
 .yarn/*
 /.yarn/*
+/.yarn/plugins/@yarnpkg/plugin-typescript.cjs
+/.yarn/patches/usehooks-ts-npm-2.7.2-fceffe0e43.patch
+/.yarn/releases/yarn-3.2.3.cjs
+
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
