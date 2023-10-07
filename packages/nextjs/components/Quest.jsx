@@ -180,9 +180,9 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
               <h1 className=" font-bold text-lg">Sign Transactions</h1>
               <p className=" text-md">Please open your wallet to sign the following transactions:</p>
               <ul className="steps steps-vertical">
-                <li className="step step-primary">Create Semiphore ID</li>
-                <li className="step step-primary">ZK Proof</li>
-                <li className="step step-primary">Vote in the Quest and join lottery 💦</li>
+                <li className="step step-primary">Create Semiphore ID 💳</li>
+                <li className="step step-primary">ZK Proof 😎</li>
+                <li className="step step-primary">Vote in the Quest and join lottery 🦈</li>
               </ul>
               <div className="modal-action">
                 <form method="dialog">
