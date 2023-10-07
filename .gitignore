@@ -3,6 +3,7 @@ node_modules
 # dependencies, yarn, etc
 # yarn / eslint
 .yarn/*
+/.yarn/*
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
@@ -104,4 +105,3 @@ fabric.properties
 
 # Built Visual Studio Code Extensions
 *.vsix
-/.yarn/*
