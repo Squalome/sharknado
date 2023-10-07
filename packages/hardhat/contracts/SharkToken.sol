@@ -25,6 +25,12 @@ contract SharkToken is ERC721 {
         _safeMint(recipient, newTokenId);
     }
 
+    function batchMintSharkTokens(address[] memory recipients) public onlyAdmin {
+        for (uint256 i = 0; i < recipients.length; i++) {
+            mintSharkToken(recipients[i]);
+        }
+    }
+
     function admin() public view returns (address) {
         return _admin;
     }
