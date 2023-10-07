@@ -18,6 +18,13 @@
       "~~/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/assets/BuidlGuidlLogo.tsx", "components/Quest.jsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "components/assets/BuidlGuidlLogo.tsx",
+    "components/Quest.jsx",
+    "components/QuestsIntro.jsx"
+  ],
   "exclude": ["node_modules"]
 }
