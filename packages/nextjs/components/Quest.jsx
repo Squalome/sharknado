@@ -1,25 +1,88 @@
 import React, { useState } from "react";
+import { SemaphoreEthers } from "@semaphore-protocol/data";
+import { Group } from "@semaphore-protocol/group";
+import { Identity } from "@semaphore-protocol/identity";
+import { BigNumber, utils } from "ethers";
+import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { AddressInput } from "~~/components/scaffold-eth";
+import { useSharknadoContractWrite } from "~~/hooks/useContractWrite";
 
 /**
  * Quest question card
  */
-export const Quest = ({ question_id, question, reward, sharks, contractAddress, optionA, optionB }) => {
+export const Quest = ({ questionId, groupId, question, reward, sharks, contractAddress, optionA, optionB }) => {
   const [isSelected, setIsSelected] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [response, setResponse] = useState("");
-  const [address, setAddress] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
 
-  const handleClick = () => {
-    setIsSelected(!isSelected);
+  const { address } = useAccount();
+
+  const { write: writeJoinGroup } = useSharknadoContractWrite("joinGroup");
+  const { write: writeSendAnswerToQuestion } = useSharknadoContractWrite("sendAnswerToQuestion");
+
+  const handleSubmit = async () => {
+    let success = false;
+
     setIsModalOpen(true);
 
-    if (!isSubmitted) {
-      setIsSubmitted(!isSubmitted);
+    // just always use wallet address as identity string
+    const identity = new Identity(address);
+
+    console.log({ identity });
+
+    try {
+      await writeJoinGroup({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
+    } catch (e) {
+      console.log("failed joining group, already joined or not holder?");
+      console.log(e?.message);
     }
-    console.log(`Submitted ${response} with wallet ${address}`);
+
+    try {
+      const semaphore = new SemaphoreEthers("https://gnosis.drpc.org", {
+        address: process.env.NEXT_PUBLIC_SEMAPHORE_CONTRACT_ADDRESS,
+      });
+
+      const users = await semaphore.getGroupMembers(groupId.toString());
+
+      const group = new Group(groupId.toString(), 20, users);
+
+      const signal = BigNumber.from(
+        utils.formatBytes32String(`${response === "YES" ? 1 : 0}${walletAddress}`),
+      ).toString();
+
+      const { proof, merkleTreeRoot, nullifierHash } = await generateProof(
+        _identity,
+        group,
+        groupId.toString(),
+        signal,
+      );
+
+      await writeSendAnswerToQuestion({
+        args: [
+          questionId.toString(),
+          groupId.toString(),
+          response === "YES",
+          walletAddress,
+          merkleTreeRoot,
+          nullifierHash,
+          proof,
+        ],
+      });
+      success = true;
+    } catch (e) {
+      console.log("failed sending answer");
+      console.log(e?.message);
+    }
+
+    if (success) {
+      setIsSelected(!isSelected);
+      setIsSubmitted(!isSubmitted);
+
+      console.log(`Submitted ${response} with wallet ${walletAddress}`);
+    }
   };
 
   const selectOption = e => {
@@ -39,7 +102,7 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
 
       <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
         {/* Quest details  */}
-        <strong>{question_id}</strong>
+        <strong>{questionId}</strong>
         <Address address={contractAddress} />
         <p>{question}</p>
         <p>Bait: {reward}</p>
@@ -66,9 +129,9 @@ export const Quest = ({ question_id, question, reward, sharks, contractAddress, 
             <label className="label">
               <span className="label-text">Paste a fresh wallet address of yours here to join the pool!</span>
             </label>
-            <AddressInput onChange={setAddress} value={address} placeholder="Wallet address" />
+            <AddressInput onChange={setWalletAddress} value={walletAddress} placeholder="Wallet address" />
             <button
-              onClick={() => handleClick()}
+              onClick={() => handleSubmit()}
               className="btn btn-secondary btn-md normal-case font-thick bg-base-200 mt-4"
             >
               Submit

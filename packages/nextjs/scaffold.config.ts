@@ -1,6 +1,8 @@
 import * as chains from "wagmi/chains";
 
 export type ScaffoldConfig = {
+  sharknadoAddress: string;
+  sharknadoTokenAddress: string;
   targetNetwork: chains.Chain;
   pollingInterval: number;
   alchemyApiKey: string;
@@ -11,6 +13,9 @@ export type ScaffoldConfig = {
 };
 
 const scaffoldConfig = {
+  sharknadoAddress: "0x10d7526150f4134d9B6631c8C4A6d812a91dFfA7",
+  sharknadoTokenAddress: "0xf649cb1884dcf8bac5ccfa669083c489288685bb",
+
   // The network where your DApp lives in
   targetNetwork: chains.gnosis,
 

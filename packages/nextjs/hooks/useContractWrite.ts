@@ -1,9 +1,9 @@
 import Sharknado from "../public/Sharknado.json";
-import { useContractRead } from "wagmi";
+import { useContractWrite } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 
-export const useSharknadoContract = (functionName: string) => {
-  const contract = useContractRead({
+export const useSharknadoContractWrite = (functionName: string) => {
+  const contract = useContractWrite({
     abi: Sharknado.abi,
     address: scaffoldConfig.sharknadoAddress,
     functionName,
@@ -12,8 +12,8 @@ export const useSharknadoContract = (functionName: string) => {
   return contract;
 };
 
-export const useSharknadoTokenContract = (functionName: string) => {
-  const contract = useContractRead({
+export const useSharknadoTokenContractWrite = (functionName: string) => {
+  const contract = useContractWrite({
     abi: Sharknado.abi,
     address: scaffoldConfig.sharknadoTokenAddress,
     functionName,
