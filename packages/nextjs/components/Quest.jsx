@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { SemaphoreEthers } from "@semaphore-protocol/data";
 import { Group } from "@semaphore-protocol/group";
 import { Identity } from "@semaphore-protocol/identity";
+import { BigNumber, utils } from "ethers";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { AddressInput } from "~~/components/scaffold-eth";
 import { useSharknadoContractWrite } from "~~/hooks/useContractWrite";
-import scaffoldConfig from "~~/scaffold.config";
 
 /**
  * Quest question card
@@ -53,7 +53,12 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
         utils.formatBytes32String(`${response === "YES" ? 1 : 0}${walletAddress}`),
       ).toString();
 
-      const { proof, merkleTreeRoot, nullifierHash } = await generateProof(_identity, group, groupId, signal);
+      const { proof, merkleTreeRoot, nullifierHash } = await generateProof(
+        _identity,
+        group,
+        groupId.toString(),
+        signal,
+      );
 
       await writeSendAnswerToQuestion({
         args: [
@@ -97,7 +102,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
 
       <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
         {/* Quest details  */}
-        <strong>{question_id}</strong>
+        <strong>{questionId}</strong>
         <Address address={contractAddress} />
         <p>{question}</p>
         <p>Bait: {reward}</p>
