@@ -14,6 +14,12 @@ const Home: NextPage = () => {
             <span className="block text-4xl font-bold">What is Sharknado?</span>
           </h1>
           <p className="text-center text-lg">Dive in, Cash out</p>
+          <p className="text-center text-md">Dive into the swirling waters of targeted surveys with Sharknado!</p>
+          <p className="text-center text-sm">
+            Got an NFT? Great! You&rsquo;re the bait. Answer quick-fire questions targeted at your unique NFT community
+            and get a chance to win some serious bounty. Our shark mascot leads the way, picking one lucky winner from
+            the tornado of anonymous wallets. Don&rsquo;t just float, swim with the sharks!
+          </p>
         </div>
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
