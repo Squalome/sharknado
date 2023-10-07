@@ -109,31 +109,43 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
     <div className="indicator">
       {isSubmitted ? <span className="indicator-item badge badge-warning">submitted</span> : null}
 
-      <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
+      <div className="flex flex-col bg-base-100 px-10 py-10 text-left items-left max-w-xs rounded-2xl">
         {/* Quest details  */}
-        <strong>{questionId}</strong>
+        <strong className="text-lg pb-6">
+          #{questionId.toString()}: {question}
+        </strong>
         <Address address={contractAddress} />
-        <p>{question}</p>
-        <p>Bait: {reward}</p>
-        <p>Sharks: {sharks}</p>
+        <p className="py-2 my-0">Bait: {reward.toString()} ETH</p>
+        <p className="pb-2 my-0">Sharks: {sharks}</p>
 
         {/* Show button to join quest or show options if quest is already joined  */}
         {isSelected ? (
           // Options
-          <div className="flex flex-col bg-base-100 px-12 pt-6 text-center items-center max-w-xs rounded-3xl">
-            <div className="flex flex-row gap-3 pb-6">
-              <button
-                onClick={e => selectOption(e)}
-                className={response == optionA.toUpperCase() ? "btn btn-secondary" : "btn btn-accent"}
-              >
-                {optionA}
-              </button>
-              <button
-                onClick={e => selectOption(e)}
-                className={response == optionB.toUpperCase() ? "btn btn-secondary" : "btn btn-accent"}
-              >
-                {optionB}
-              </button>
+          <div className="flex flex-col bg-base-100 text-left items-left max-w-xs rounded-2xl">
+            <div className="flex flex-row gap-3 pb-0">
+              <div className="flex flex-col w-full lg:flex-row">
+                <div className="grid flex-grow items-center">
+                  <button
+                    onClick={e => selectOption(e)}
+                    className={
+                      response == optionA.toUpperCase() ? "btn rounded-lg btn-secondary" : "btn rounded-lg btn-accent"
+                    }
+                  >
+                    {optionA}
+                  </button>
+                </div>
+                <div className="divider lg:divider-horizontal">OR</div>
+                <div className="grid flex-grow h-32 items-center">
+                  <button
+                    onClick={e => selectOption(e)}
+                    className={
+                      response == optionB.toUpperCase() ? "btn rounded-lg btn-secondary" : "btn rounded-lg btn-accent"
+                    }
+                  >
+                    {optionB}
+                  </button>
+                </div>
+              </div>
             </div>
             <label className="label">
               <span className="label-text">Paste a fresh wallet address of yours here to join the pool!</span>
@@ -141,7 +153,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
             <AddressInput onChange={setWalletAddress} value={walletAddress} placeholder="Wallet address" />
             <button
               onClick={() => handleSubmit()}
-              className="btn btn-secondary btn-md normal-case font-thick bg-base-200 mt-4"
+              className="btn rounded-lg btn-secondary btn-md normal-case font-thick bg-base-200 mt-4"
             >
               Submit
             </button>
