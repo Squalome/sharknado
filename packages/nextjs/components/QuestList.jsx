@@ -1,9 +1,14 @@
 import { Quest } from "./Quest";
+import { useContract } from "~~/hooks/useContractRead";
 
 /**
  * List of quests
  */
 export const QuestList = () => {
+  const contract = useContract("getQuestionList");
+
+  console.log({ contract: contract.data });
+
   return (
     <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
       <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
