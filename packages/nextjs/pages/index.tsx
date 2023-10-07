@@ -13,7 +13,6 @@ const Home: NextPage = () => {
             {/* <span className="block text-2xl mb-2">What is</span> */}
             <span className="block text-4xl font-bold">What is Sharknado?</span>
           </h1>
-          <p className="text-center text-lg">Dive in, Cash out</p>
           <p className="text-center text-md">Dive into the swirling waters of targeted surveys with Sharknado!</p>
           <p className="text-center text-sm">
             Got an NFT? Great! You&rsquo;re the bait. Answer quick-fire questions targeted at your unique NFT community
