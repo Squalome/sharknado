@@ -225,7 +225,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
           {isModalOpen ? <input type="checkbox" id="my-modal" className="modal-toggle" checked /> : null}
 
           <dialog id="my-modal" className="modal">
-            <div className="modal-box bg-blue-600 float-left">
+            <div className="modal-box bg-accent float-left">
               <progress className="progress progress-primary w-100 mb-6"></progress>
               <h1 className=" font-bold text-lg">Sign Transactions</h1>
               <p className=" text-md">Please open your wallet to sign the following transactions:</p>
