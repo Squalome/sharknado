@@ -20,6 +20,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
   const [walletAddress, setWalletAddress] = useState("");
 
   const { address } = useAccount();
+  const sharksArray = sharks.split("/");
 
   const { write: writeJoinGroup } = useSharknadoContractWrite("joinGroup");
   const { write: writeSendAnswerToQuestion } = useSharknadoContractWrite("sendAnswerToQuestion");
@@ -128,7 +129,14 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
         </strong>
         <Address address={contractAddress} />
         <p className="py-2 my-0">Bait: {reward.toString()} ETH</p>
-        <p className="pb-2 my-0">Sharks: {sharks}</p>
+        <p className="pb-2 my-0">
+          {sharks} Sharks:{" "}
+          <progress
+            className="progress progress-primary w-56"
+            value={parseInt(sharksArray[0])}
+            max={sharksArray[1]}
+          ></progress>
+        </p>
 
         {/* Show button to join quest or show options if quest is already joined  */}
         {isSelected ? (
@@ -147,7 +155,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
                   </button>
                 </div>
                 <div className="divider lg:divider-horizontal">OR</div>
-                <div className="grid flex-grow h-32 items-center">
+                <div className="grid flex-grow items-center">
                   <button
                     onClick={e => selectOption(e)}
                     className={
@@ -173,7 +181,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
         ) : (
           <button
             onClick={() => setIsSelected(!isSelected)}
-            className="btn btn-secondary btn-md normal-case font-thick bg-base-200"
+            className="btn btn-secondary btn-md normal-case font-thick bg-base-200 mt-3"
           >
             Join Quest
           </button>
@@ -188,7 +196,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
 
           <dialog id="my-modal" className="modal">
             <div className="modal-box bg-blue-600 float-left">
-              <progress className="progress progress-warning w-100 mb-6"></progress>
+              <progress className="progress progress-primary w-100 mb-6"></progress>
               <h1 className=" font-bold text-lg">Sign Transactions</h1>
               <p className=" text-md">Please open your wallet to sign the following transactions:</p>
               <ul className="steps steps-vertical">
