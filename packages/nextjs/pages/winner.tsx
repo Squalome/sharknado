@@ -21,8 +21,7 @@ const Winner: NextPage = () => {
     });
 
     const result = await response.json();
-    const address =
-      result?.data?.lotteryPayouts?.[0]?.lotteryPayoutAddress || "0xDe00050C5eCBA5E32E1D0b57e1f6669184f4fC15";
+    const address = result?.data?.lotteryPayouts?.[0]?.lotteryPayoutAddress || "";
     if (address) {
       setHasWinner(true);
       setLotteryPayoutAddress(address);
