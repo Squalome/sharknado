@@ -1,0 +1,48 @@
+type GroupJoined @entity(immutable: true) {
+  id: Bytes!
+  groupId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type LotteryPayout @entity(immutable: true) {
+  id: Bytes!
+  lotteryPayoutAddress: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  previousOwner: Bytes! # address
+  newOwner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type QuestionAdded @entity(immutable: true) {
+  id: Bytes!
+  questionId: BigInt! # uint256
+  groupId: BigInt! # uint256
+  question: String! # string
+  eligibleHolderTokenContract: Bytes! # address
+  answerThreshold: BigInt! # uint32
+  bountyAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type QuestionAnswered @entity(immutable: true) {
+  id: Bytes!
+  questionId: BigInt! # uint256
+  groupId: BigInt! # uint256
+  isUpvote: Boolean! # bool
+  totalVotes: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
