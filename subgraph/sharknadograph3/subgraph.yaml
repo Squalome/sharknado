@@ -1,0 +1,36 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Sharknado
+    network: gnosis
+    source:
+      address: "0xeFB23e1a4573eBA1385D2730A4ddB9aeeb6ea20F"
+      abi: Sharknado
+      startBlock: 030352085
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - GroupJoined
+        - LotteryPayout
+        - OwnershipTransferred
+        - QuestionAdded
+        - QuestionAnswered
+      abis:
+        - name: Sharknado
+          file: ./abis/Sharknado.json
+      eventHandlers:
+        - event: GroupJoined(uint256)
+          handler: handleGroupJoined
+        - event: LotteryPayout(address,uint256,uint256,string,address,uint32,uint256,uint32,uint32)
+          handler: handleLotteryPayout
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: QuestionAdded(uint256,uint256,string,address,uint32,uint256)
+          handler: handleQuestionAdded
+        - event: QuestionAnswered(uint256,uint256,bool,uint256)
+          handler: handleQuestionAnswered
+      file: ./src/sharknado.ts
