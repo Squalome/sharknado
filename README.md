@@ -1,13 +1,11 @@
-# Sharknado
+# Sharknado 🦈
+
+Chec out our [Figma prototype](https://www.figma.com/proto/Sharknado) and [TAIKAI submission](https://taikai.network/ethrome/hackathons/ethrome-23/projects/clnfyh1ya00gmye01j19ob1rz/idea).
+
 
 ## DESCRIPTION
 A platform where you can take surveys anonymously, authenticate your NFT ownership with zk proofs, and win cash prizes in a pseudo-annonomized & randomized bounty system.
-
-## REPOSITORY WITH PROJECT'S CODE (should be open and public)
-GitHub Organization: Squalome
-Main repo: https://github.com/Squalome/sharknado  
-Semaphore repo: https://github.com/Squalome/Sharknado_Semaphore
-Figma prototype: https://www.figma.com/proto/Sharknado
+ 
 
 ## Bounties (provide a description or explanation on how you integrated any bounty sponsors technology)
 
