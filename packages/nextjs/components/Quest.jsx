@@ -4,7 +4,7 @@ import { Group } from "@semaphore-protocol/group";
 import { Identity } from "@semaphore-protocol/identity";
 import { generateProof } from "@semaphore-protocol/proof";
 import { utils } from "ethers";
-// import { waitForTransaction } from "ethers";
+import { ethers } from "ethers";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { AddressInput } from "~~/components/scaffold-eth";
@@ -23,12 +23,11 @@ const waitPromise = timeout => {
   });
 };
 
-// const waitTransactionConfirmation = async (provider, txHash) => {
-//   const receipt = await provider.waitForTransaction(txHash);
-//   console.log("Transaction confirmed");
-//   console.log("Receipt:", receipt);
-//   // Continue with the rest of your code
-// };
+const waitTransactionConfirmation = async (provider, txHash) => {
+  const receipt = await provider.waitForTransaction(txHash);
+  console.log("Transaction confirmed");
+  console.log("Receipt:", receipt);
+};
 
 export const Quest = ({ questionId, groupId, question, reward, sharks, contractAddress, optionA, optionB }) => {
   const [isSelected, setIsSelected] = useState(false);
@@ -63,11 +62,15 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
 
     console.log("questionId: ", questionId.toString());
     console.log("groupId: ", groupId.toString());
+
+    const provider = new ethers.providers.JsonRpcProvider(scaffoldConfig.sharknadoAddress);
+
     try {
       // FIXME: how to wait for the damn tx within a function??
       // wagmi hello??
       const txHash = await writeJoinGroup({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
-      // await waitForTransaction(txHash);
+
+      await waitTransactionConfirmation(provider, txHash);
 
       await waitPromise(2000);
 
@@ -123,7 +126,8 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
           proof,
         ],
       });
-      // await waitForTransaction(txHash);
+
+      await waitTransactionConfirmation(provider, txHash);
       success = true;
 
       console.log("sent answer");
