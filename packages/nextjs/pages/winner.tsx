@@ -10,13 +10,13 @@ const Winner: NextPage = () => {
   const [lotteryPayoutAddress, setLotteryPayoutAddress] = useState<string>("");
 
   const fetchLotteryPayoutAddress = async () => {
-    const response = await fetch("https://api.studio.thegraph.com/query/54895/sharknadograph2/v0.0.5", {
+    const response = await fetch("https://api.studio.thegraph.com/query/54895/sharknadograph3/v0.0.5", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        query: "{ lotteryPayouts(first:5){ id lotteryPayoutAddress blockNumber blockTimestamp } }",
+        query: "{ lotteryPayouts(first:5){ id lotteryPayoutAddress questionId groupId } }",
       }),
     });
 
