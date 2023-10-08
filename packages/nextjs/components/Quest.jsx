@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { SemaphoreEthers } from "@semaphore-protocol/data";
-import { Group } from "@semaphore-protocol/group";
+// import { SemaphoreEthers } from "@semaphore-protocol/data";
+// import { Group } from "@semaphore-protocol/group";
 import { Identity } from "@semaphore-protocol/identity";
-import { generateProof } from "@semaphore-protocol/proof";
-import { utils } from "ethers";
+// import { generateProof } from "@semaphore-protocol/proof";
+// import { utils } from "ethers";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { AddressInput } from "~~/components/scaffold-eth";
-import { useSharknadoContractWrite } from "~~/hooks/useContractWrite";
-import scaffoldConfig from "~~/scaffold.config";
+
+// import { useSharknadoContractWrite } from "~~/hooks/useContractWrite";
+// import scaffoldConfig from "~~/scaffold.config";
 
 /**
  * Quest question card
@@ -20,85 +21,87 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
   const [response, setResponse] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [isError, setIsError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  // const [errorMsg, setErrorMsg] = useState("");
 
   const { address } = useAccount();
   const sharksArray = sharks.split("/");
 
-  const { write: writeJoinGroup } = useSharknadoContractWrite("joinGroup");
-  const { write: writeSendAnswerToQuestion } = useSharknadoContractWrite("sendAnswerToQuestion");
+  // const { write: writeJoinGroup } = useSharknadoContractWrite("joinGroup");
+  // const { write: writeSendAnswerToQuestion } = useSharknadoContractWrite("sendAnswerToQuestion");
 
   const handleSubmit = async () => {
-    setIsModalOpen(false);
-
     // just always use wallet address as identity string
     const identity = new Identity(address);
-
     console.log({ identity });
     console.log("questionId: ", questionId.toString());
     console.log("groupId: ", groupId.toString());
 
-    try {
-      await writeJoinGroup({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
-      console.log("joined Group");
-    } catch (e) {
-      console.log(e?.message);
-      console.log("failed joining group, already joined or not holder?");
-    }
+    setIsModalOpen(true);
+    setIsSubmitted(true);
+    setIsSelected(!isSelected);
+    console.log(isModalOpen);
 
-    try {
-      const semaphore = new SemaphoreEthers(scaffoldConfig.rpcEndpoint, {
-        address: process.env.NEXT_PUBLIC_SEMAPHORE_CONTRACT_ADDRESS,
-      });
+    // try {
+    //   await writeJoinGroup({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
+    //   console.log("joined Group");
+    // } catch (e) {
+    //   console.log(e?.message);
+    //   console.log("failed joining group, already joined or not holder?");
+    // }
 
-      const users = await semaphore.getGroupMembers(groupId.toString());
-      console.log({ users });
+    // try {
+    //   const semaphore = new SemaphoreEthers(scaffoldConfig.rpcEndpoint, {
+    //     address: process.env.NEXT_PUBLIC_SEMAPHORE_CONTRACT_ADDRESS,
+    //   });
 
-      const group = new Group(groupId.toString(), 20, users);
-      console.log({ group });
+    //   const users = await semaphore.getGroupMembers(groupId.toString());
+    //   console.log({ users });
 
-      const isUpvote = response === "YES" ? 1 : 0;
-      const addressBytes = utils.arrayify(walletAddress);
-      const packedData = new Uint8Array(21);
-      packedData[0] = isUpvote;
+    //   const group = new Group(groupId.toString(), 20, users);
+    //   console.log({ group });
 
-      for (let i = 0; i < 20; i++) {
-        packedData[i + 1] = addressBytes[i];
-      }
-      console.log({ packedData });
+    //   const isUpvote = response === "YES" ? 1 : 0;
+    //   const addressBytes = utils.arrayify(walletAddress);
+    //   const packedData = new Uint8Array(21);
+    //   packedData[0] = isUpvote;
 
-      const packedDataBytesLike = utils.hexlify(packedData);
-      const signal = packedDataBytesLike;
-      console.log({ signal });
+    //   for (let i = 0; i < 20; i++) {
+    //     packedData[i + 1] = addressBytes[i];
+    //   }
+    //   console.log({ packedData });
 
-      const { proof, merkleTreeRoot, nullifierHash } = await generateProof(identity, group, groupId.toString(), signal);
-      console.log({ proof, merkleTreeRoot, nullifierHash });
+    //   const packedDataBytesLike = utils.hexlify(packedData);
+    //   const signal = packedDataBytesLike;
+    //   console.log({ signal });
 
-      await writeSendAnswerToQuestion({
-        args: [
-          questionId.toString(),
-          groupId.toString(),
-          response === "YES",
-          walletAddress,
-          merkleTreeRoot,
-          nullifierHash,
-          proof,
-        ],
-      });
-      console.log("sent answer");
+    //   const { proof, merkleTreeRoot, nullifierHash } = await generateProof(identity, group, groupId.toString(), signal);
+    //   console.log({ proof, merkleTreeRoot, nullifierHash });
 
-      setIsSelected(!isSelected);
-      setIsSubmitted(!isSubmitted);
+    //   await writeSendAnswerToQuestion({
+    //     args: [
+    //       questionId.toString(),
+    //       groupId.toString(),
+    //       response === "YES",
+    //       walletAddress,
+    //       merkleTreeRoot,
+    //       nullifierHash,
+    //       proof,
+    //     ],
+    //   });
+    //   console.log("sent answer");
 
-      console.log(`Submitted ${response} with wallet ${walletAddress}`);
-    } catch (e) {
-      // Raise alert
-      setIsError(true);
-      setErrorMsg(`${e?.message}`);
-      console.log(isError);
-      console.log(e?.message);
-      console.log("failed sending answer");
-    }
+    //   setIsSelected(!isSelected);
+    //   setIsSubmitted(!isSubmitted);
+
+    //   console.log(`Submitted ${response} with wallet ${walletAddress}`);
+    // } catch (e) {
+    //   // Raise alert
+    //   // setIsError(true);
+    //   // setErrorMsg(`${e?.message}`);
+    //   console.log(isError);
+    //   console.log(e?.message);
+    //   console.log("failed sending answer");
+    // }
   };
 
   const selectOption = e => {
@@ -107,7 +110,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
   };
 
   const handleSign = () => {
-    // setIsModalOpen(false);
+    setIsModalOpen(false);
     console.log(`Signed transactions`);
     window.location.href = "/winner";
   };
@@ -211,10 +214,10 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
         {isSubmitted ? (
           <>
             {/* Check checkbox if modal should be open */}
-            {isModalOpen ? <input type="checkbox" id="my-modal" class="modal-toggle" checked /> : null}
+            {isSubmitted ? <input type="checkbox" id="my-modal" class="modal-toggle" checked /> : null}
 
             <dialog id="my-modal" className="modal">
-              <div className="modal-box bg-blue-600 float-left">
+              <div className="modal-box bg-primary float-left">
                 <progress className="progress progress-primary w-100 mb-6"></progress>
                 <h1 className=" font-bold text-lg">Sign Transactions</h1>
                 <p className=" text-md">Please open your wallet to sign the following transactions:</p>
