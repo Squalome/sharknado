@@ -1,6 +1,6 @@
 # Sharknado 🦈
 
-Chec out our [Figma prototype](https://www.figma.com/proto/Sharknado) and [TAIKAI submission](https://taikai.network/ethrome/hackathons/ethrome-23/projects/clnfyh1ya00gmye01j19ob1rz/idea).
+Check out our [Figma prototype](https://www.figma.com/proto/Sharknado) and [TAIKAI submission](https://taikai.network/ethrome/hackathons/ethrome-23/projects/clnfyh1ya00gmye01j19ob1rz/idea)!
 
 
 ## DESCRIPTION
