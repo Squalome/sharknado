@@ -14,7 +14,7 @@ export type ScaffoldConfig = {
 };
 
 const scaffoldConfig = {
-  sharknadoAddress: "0x10d7526150f4134d9B6631c8C4A6d812a91dFfA7",
+  sharknadoAddress: "0x3B2B510EE05676dA38739f5a7c0e870bE34eED0D",
   sharknadoTokenAddress: "0xf649cb1884dcf8bac5ccfa669083c489288685bb",
   rpcEndpoint: "https://rpc.eu-central-2.gateway.fm/v4/gnosis/non-archival/mainnet",
 
