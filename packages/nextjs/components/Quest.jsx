@@ -4,7 +4,7 @@ import { Group } from "@semaphore-protocol/group";
 import { Identity } from "@semaphore-protocol/identity";
 import { generateProof } from "@semaphore-protocol/proof";
 import { utils } from "ethers";
-import { waitForTransaction } from "ethers";
+// import { waitForTransaction } from "ethers";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { AddressInput } from "~~/components/scaffold-eth";
@@ -14,6 +14,21 @@ import scaffoldConfig from "~~/scaffold.config";
 /**
  * Quest question card
  */
+
+const waitPromise = timeout => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, timeout);
+  });
+};
+
+// const waitTransactionConfirmation = async (provider, txHash) => {
+//   const receipt = await provider.waitForTransaction(txHash);
+//   console.log("Transaction confirmed");
+//   console.log("Receipt:", receipt);
+//   // Continue with the rest of your code
+// };
 
 export const Quest = ({ questionId, groupId, question, reward, sharks, contractAddress, optionA, optionB }) => {
   const [isSelected, setIsSelected] = useState(false);
@@ -25,13 +40,21 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
   const { address } = useAccount();
   const sharksArray = sharks.split("/");
 
-  const { writeAsync: writeJoinGroup, data: dataJoinGroup } = useSharknadoContractWrite("joinGroup");
+  const { writeAsync: writeJoinGroup } = useSharknadoContractWrite("joinGroup");
   const { writeAsync: writeSendAnswerToQuestion } = useSharknadoContractWrite("sendAnswerToQuestion");
 
   const handleSubmit = async () => {
-    let success = false;
+    setIsModalOpen(true);
+    setIsSubmitted(true);
+  };
 
-    setIsModalOpen(false);
+  const selectOption = e => {
+    console.log(`Selected: ${e.target.innerText}`);
+    setResponse(e.target.innerText);
+  };
+
+  const handleSign = async () => {
+    let success = false;
 
     // just always use wallet address as identity string
     const identity = new Identity(address);
@@ -44,7 +67,10 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
       // FIXME: how to wait for the damn tx within a function??
       // wagmi hello??
       const txHash = await writeJoinGroup({ args: [questionId.toString(), groupId.toString(), identity._commitment] });
-      await waitForTransaction(txHash);
+      // await waitForTransaction(txHash);
+
+      await waitPromise(2000);
+
       console.log("joined Group");
     } catch (e) {
       console.log(e?.message);
@@ -97,7 +123,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
           proof,
         ],
       });
-      await waitForTransaction(txHash);
+      // await waitForTransaction(txHash);
       success = true;
 
       console.log("sent answer");
@@ -111,18 +137,9 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
       setIsSubmitted(!isSubmitted);
 
       console.log(`Submitted ${response} with wallet ${walletAddress}`);
+      window.location.href = "/winner";
     }
-  };
-
-  const selectOption = e => {
-    console.log(`Selected: ${e.target.innerText}`);
-    setResponse(e.target.innerText);
-  };
-
-  const handleSign = () => {
-    // setIsModalOpen(false);
-    console.log(`Signed transactions`);
-    window.location.href = "/winner";
+    setIsModalOpen(false);
   };
 
   return (
@@ -199,7 +216,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
       {isSubmitted ? (
         <>
           {/* Check checkbox if modal should be open */}
-          {isModalOpen ? <input type="checkbox" id="my-modal" class="modal-toggle" checked /> : null}
+          {isModalOpen ? <input type="checkbox" id="my-modal" className="modal-toggle" checked /> : null}
 
           <dialog id="my-modal" className="modal">
             <div className="modal-box bg-blue-600 float-left">
