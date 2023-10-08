@@ -91,3 +91,10 @@ p {
     transform: translate(-50%, -75%) rotate(360deg);
   }
 }
+
+.eligible-address {
+  font-size: 10px;
+  opacity: 0.5;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}

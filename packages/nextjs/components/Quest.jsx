@@ -155,6 +155,8 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
         <strong className="text-lg pb-6">
           #{questionId.toString()}: {question}
         </strong>
+
+        <p className="py-2 my-0 eligible-address">Eligible Contract Address</p>
         <Address address={contractAddress} />
         <p className="py-2 my-0">Bait: {reward.toString()} ETH</p>
         <p className="pb-2 my-0">
