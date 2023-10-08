@@ -25,6 +25,7 @@ const Winner: NextPage = () => {
     if (address) {
       setHasWinner(true);
       setLotteryPayoutAddress(address);
+      console.log("There is a winner! " + address);
     }
   };
 
