@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { MetaHeader } from "~~/components/MetaHeader";
@@ -7,6 +7,31 @@ import { Address } from "~~/components/scaffold-eth";
 
 const Winner: NextPage = () => {
   const [hasWinner, setHasWinner] = useState(false);
+  const [lotteryPayoutAddress, setLotteryPayoutAddress] = useState<string>("");
+
+  const fetchLotteryPayoutAddress = async () => {
+    const response = await fetch("https://api.studio.thegraph.com/query/54895/sharknadograph2/v0.0.5", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: "{ lotteryPayouts(first:5){ id lotteryPayoutAddress blockNumber blockTimestamp } }",
+      }),
+    });
+
+    const result = await response.json();
+    const address =
+      result?.data?.lotteryPayouts?.[0]?.lotteryPayoutAddress || "0xDe00050C5eCBA5E32E1D0b57e1f6669184f4fC15";
+    if (address) {
+      setHasWinner(true);
+      setLotteryPayoutAddress(address);
+    }
+  };
+
+  useEffect(() => {
+    fetchLotteryPayoutAddress();
+  }, []);
 
   return (
     <>
@@ -21,7 +46,7 @@ const Winner: NextPage = () => {
               <h2 className="card-title text-lg">Shark Bit the Bait!</h2>
               <i className="text-md mt-3">#06 Shark or Horse?</i>
               <p className="text-sm mt-3">Winner wallet address:</p>
-              <Address address="0xDe00050C5eCBA5E32E1D0b57e1f6669184f4fC15" />
+              <Address address={lotteryPayoutAddress} />
               <p className="text-center text-md">Funds are in your wallet, enjoy the prize!</p>
               <div className="card-actions">
                 <Link href="/quests">
