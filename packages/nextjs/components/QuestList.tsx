@@ -22,9 +22,7 @@ type Question = {
  */
 const QuestList = () => {
   const contract = useSharknadoContract("getQuestionList");
-
   const questionList = contract.data as undefined | Question[];
-
   console.log({ questionList });
 
   return (

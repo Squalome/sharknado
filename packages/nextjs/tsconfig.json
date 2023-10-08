@@ -24,7 +24,8 @@
     "**/*.tsx",
     "components/assets/BuidlGuidlLogo.tsx",
     "components/Quest.jsx",
-    "components/QuestsIntro.jsx"
+    "components/QuestsIntro.jsx",
+    "components/ErrorAlert.jsx"
   ],
   "exclude": ["node_modules"]
 }
