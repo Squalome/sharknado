@@ -1,5 +1,4 @@
-# PROJECT NAME
-Sharknado
+# Sharknado
 
 ## DESCRIPTION
 A platform where you can take surveys anonymously, authenticate your NFT ownership with zk proofs, and win cash prizes in a pseudo-annonomized & randomized bounty system.
