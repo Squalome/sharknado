@@ -146,6 +146,10 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
     setIsModalOpen(false);
   };
 
+  function navigateToWinner() {
+    window.location.href = "/winner";
+  }
+
   return (
     <div className="indicator">
       {isSubmitted ? <span className="indicator-item badge badge-warning">submitted</span> : null}
@@ -207,12 +211,20 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
             </button>
           </div>
         ) : (
-          <button
-            onClick={() => setIsSelected(!isSelected)}
-            className="btn btn-secondary btn-md normal-case font-thick bg-base-200 mt-3"
-          >
-            Join Quest
-          </button>
+          <>
+            <button
+              onClick={() => setIsSelected(!isSelected)}
+              className="btn btn-secondary btn-md normal-case font-thick bg-base-200 mt-3"
+            >
+              Join Quest
+            </button>
+
+            {parseInt(sharks?.split("/")?.[0]) >= parseInt(sharks?.split("/")[1]) && (
+              <button onClick={() => navigateToWinner()} className="btn btn-neutral mt-4">
+                See latest winner
+              </button>
+            )}
+          </>
         )}
       </div>
 
