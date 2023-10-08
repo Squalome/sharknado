@@ -8,6 +8,7 @@ import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { AddressInput } from "~~/components/scaffold-eth";
 import { useSharknadoContractWrite } from "~~/hooks/useContractWrite";
+import scaffoldConfig from "~~/scaffold.config";
 
 /**
  * Quest question card
@@ -46,7 +47,7 @@ export const Quest = ({ questionId, groupId, question, reward, sharks, contractA
     }
 
     try {
-      const semaphore = new SemaphoreEthers("https://gnosis.drpc.org", {
+      const semaphore = new SemaphoreEthers(scaffoldConfig.rpcEndpoint, {
         address: process.env.NEXT_PUBLIC_SEMAPHORE_CONTRACT_ADDRESS,
       });
 
