@@ -8,6 +8,7 @@ import { Address } from "~~/components/scaffold-eth";
 const Winner: NextPage = () => {
   const [hasWinner, setHasWinner] = useState(false);
   const [lotteryPayoutAddress, setLotteryPayoutAddress] = useState<string>("");
+  const [latestWinnerQuestion, setLatestWinnerQuestion] = useState<string>("");
 
   const fetchLotteryPayoutAddress = async () => {
     const response = await fetch("https://api.studio.thegraph.com/query/54895/sharknadograph3/v0.0.5", {
@@ -16,16 +17,19 @@ const Winner: NextPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        query: "{ lotteryPayouts(first:5){ id lotteryPayoutAddress questionId groupId } }",
+        query:
+          "{lotteryPayouts(first:5, orderBy: blockTimestamp, orderDirection: desc){ id lotteryPayoutAddress questionId groupId question}}",
       }),
     });
 
     const result = await response.json();
-    const address = result?.data?.lotteryPayouts?.[0]?.lotteryPayoutAddress || "";
+    const latest = result?.data?.lotteryPayouts?.[0];
+    const address = latest?.lotteryPayoutAddress || "";
     if (address) {
       setHasWinner(true);
       setLotteryPayoutAddress(address);
-      console.log("There is a winner! " + address);
+      setLatestWinnerQuestion(latest?.question);
+      console.log("There is a winner! " + address + " for question: " + latest?.question);
     }
   };
 
@@ -44,7 +48,7 @@ const Winner: NextPage = () => {
             </figure>
             <div className="card-body">
               <h2 className="card-title text-lg">Shark Bit the Bait!</h2>
-              <i className="text-md mt-3">#06 Shark or Horse?</i>
+              <i className="text-md mt-3">{latestWinnerQuestion}</i>
               <p className="text-sm mt-3">Winner wallet address:</p>
               <Address address={lotteryPayoutAddress} />
               <p className="text-center text-md">Funds are in your wallet, enjoy the prize!</p>
